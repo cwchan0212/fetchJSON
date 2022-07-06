@@ -5,31 +5,38 @@ from urllib.error import URLError, HTTPError
 
 
 def fetchJSON(url: str) -> dict:
-    print("url", url)
+    print("[fetchJSON]: url -> ", url)
 
     userAgent = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"}
 
     req = Request(url, headers=userAgent)
     try:
-        print(req.header_items())
         response = urlopen(req)
         with urllib.request.urlopen(req) as f:
             pass
-        print(f.status)
+        print("[fetchJSON]: status -> ", f.status)
     except HTTPError as e:
-        print('Error code: ', e.code)
+        print("[fetchJSON]: ", 'Error code: ', e.code)
     except URLError as e:
         # do something
-        print('Reason: ', e.reason)
+        print("[fetchJSON]: ", 'Reason: ', e.reason)
     else:
         # do something
-        out = codecs.decode(response.read()) # byte
-        
-        f = open("./out.txt", "w")
-        f.write(out)
-        f.close()
-
+        out = codecs.decode(response.read()) # byte2Sttring
         jsonList = json.loads(out)
-        print("Type:", type(jsonList))
 
-        print('good!')
+        if type(jsonList) == dict:
+            for key, value in jsonList.items():
+                print("[fetchJSON]: key =", key, ", value =", value)
+        else:
+            print(type(jsonList))
+            for line in jsonList:
+                print("[fetchJSON]:", line)
+
+    return jsonList
+
+url = "https://timeapi.io/api/Time/current/zone?timeZone=Asia/Hong_Kong"
+#        http://worldtimeapi.org/api/timezone/Asia/Hong_Kong
+#url = "https://type.fit/api/quotes"
+
+fetchJSON(url)
