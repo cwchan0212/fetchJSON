@@ -3,7 +3,6 @@ from urllib import request, parse
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
-
 def fetchJSON(url: str) -> dict:
     print("[fetchJSON]: url -> ", url)
 
